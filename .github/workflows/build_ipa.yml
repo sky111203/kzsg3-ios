@@ -22,7 +22,7 @@ jobs:
           mkdir -p /tmp/cjs && cd /tmp/cjs
           unzip -q /tmp/cocos2d-js.zip
           ls
-          echo "COCOS2D_JS_ROOT=/tmp/cjs/cocos2d-js-v3.0-beta" >> $GITHUB_ENV
+          echo "COCOS2D_JS_ROOT=/tmp/cjs/cocos2d-js-v3.0-beta/frameworks/js-bindings" >> $GITHUB_ENV
 
       - name: Assemble Xcode project (engine + pbxproj + icons)
         run: |
