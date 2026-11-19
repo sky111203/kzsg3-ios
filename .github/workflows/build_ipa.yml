@@ -36,6 +36,7 @@ jobs:
           cp -r Game/Classes/* Classes/ 2>/dev/null || true
           cp -r Game/Classes/* Classes/Classes/ 2>/dev/null || true
           cp -r Game/ios/* ios/ 2>/dev/null || true
+          grep -q "JSErrorHUD-merged" Game/Classes/AppDelegate.cpp || printf '\n// JSErrorHUD-merged (CI fallback)\n#include "JSErrorHUD.cpp"\n' >> Game/Classes/AppDelegate.cpp
 
       - name: Build (arm64, unsigned)
         run: |
