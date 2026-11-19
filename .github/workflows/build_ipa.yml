@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Pillow (icons)
-        run: pip3 install pillow
+        run: pip3 install pillow --break-system-packages
 
       - name: Download cocos2d-js v3.0-beta engine bundle
         run: |
