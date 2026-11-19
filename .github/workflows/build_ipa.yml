@@ -49,7 +49,6 @@ jobs:
                      -configuration Release \
                      -sdk iphoneos \
                      ARCHS=arm64 \
-                     PRODUCT_NAME=KZSG3 \
                      ONLY_ACTIVE_ARCH=NO \
                      ENABLE_BITCODE=NO \
                      CODE_SIGNING_ALLOWED=NO \
@@ -74,6 +73,13 @@ jobs:
           APP=$(find "$GITHUB_WORKSPACE/bld" -maxdepth 3 -name "*.app" | head -1)
           echo "APP=$APP"
           test -n "$APP"
+          # 重命名二进制与 bundle 目录: 去掉空格 (LSD 拒绝带空格的可执行文件名)
+          BIN="$(basename "$APP" .app)"
+          if [ -f "$APP/$BIN" ]; then mv "$APP/$BIN" "$APP/KZSG3"; fi
+          NEWAPP="$(dirname "$APP")/KZSG3.app"
+          if [ "$APP" != "$NEWAPP" ]; then mv "$APP" "$NEWAPP"; fi
+          APP="$NEWAPP"
+          echo "RENAMED APP=$APP"
           rm -rf Payload
           mkdir Payload
           cp -R "$APP" Payload/
