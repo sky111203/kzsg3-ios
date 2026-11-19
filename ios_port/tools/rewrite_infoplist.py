@@ -5,13 +5,13 @@ import plistlib, os
 pl = {
     "CFBundleDevelopmentRegion": "zh_CN",
     "CFBundleDisplayName": "狂斩三国3",
-    "CFBundleExecutable": "KZSG3 iOS",
+    "CFBundleExecutable": "KZSG3",
     "CFBundleIcons": {"CFBundlePrimaryIcon": {"CFBundleIconFiles": [
         "Icon-29", "Icon-40", "Icon-57", "Icon-58", "Icon-72", "Icon-76",
         "Icon-80", "Icon-100", "Icon-114", "Icon-120", "Icon-144", "Icon-152"]}},
     "CFBundleIdentifier": "com.kzsg3.sanguo3",
     "CFBundleInfoDictionaryVersion": "6.0",
-    "CFBundleName": "KZSG3 iOS",
+    "CFBundleName": "KZSG3",
     "CFBundlePackageType": "APPL",
     "CFBundleShortVersionString": "1.0.5",
     "CFBundleVersion": "1.0.5",

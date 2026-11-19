@@ -49,6 +49,7 @@ jobs:
                      -configuration Release \
                      -sdk iphoneos \
                      ARCHS=arm64 \
+                     PRODUCT_NAME=KZSG3 \
                      ONLY_ACTIVE_ARCH=NO \
                      ENABLE_BITCODE=NO \
                      CODE_SIGNING_ALLOWED=NO \
