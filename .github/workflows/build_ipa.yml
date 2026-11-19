@@ -32,11 +32,11 @@ jobs:
           echo "--- Game tree ---"
           find Game -maxdepth 2 -not -path "*/Resources/*" | head -40
           sed -i '' 's/system(command.c_str());/\/\/ system(command.c_str());/g' engine/js-bindings/cocos2d-x/extensions/assets-manager/AssetsManager.cpp || true
+          grep -q "JSErrorHUD-merged" Game/Classes/AppDelegate.cpp || printf '\n// JSErrorHUD-merged (CI fallback)\n#include "JSErrorHUD.cpp"\n' >> Game/Classes/AppDelegate.cpp
           mkdir -p Classes/Classes ios
           cp -r Game/Classes/* Classes/ 2>/dev/null || true
           cp -r Game/Classes/* Classes/Classes/ 2>/dev/null || true
           cp -r Game/ios/* ios/ 2>/dev/null || true
-          grep -q "JSErrorHUD-merged" Game/Classes/AppDelegate.cpp || printf '\n// JSErrorHUD-merged (CI fallback)\n#include "JSErrorHUD.cpp"\n' >> Game/Classes/AppDelegate.cpp
 
       - name: Build (arm64, unsigned)
         run: |
