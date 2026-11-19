@@ -32,6 +32,8 @@ jobs:
           echo "--- Game tree ---"
           find Game -maxdepth 2 -not -path "*/Resources/*" | head -40
           sed -i '' 's/system(command.c_str());/\/\/ system(command.c_str());/g' engine/js-bindings/cocos2d-x/extensions/assets-manager/AssetsManager.cpp || true
+          sed -i '' 's|\.\./Classes/|Classes/|g' Game/KZSG3.xcodeproj/project.pbxproj || true
+          sed -i '' 's|\.\./ios/|ios/|g' Game/KZSG3.xcodeproj/project.pbxproj || true
 
       - name: Build (arm64, unsigned)
         run: |
