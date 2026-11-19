@@ -31,7 +31,7 @@ jobs:
           python3 tools/assemble_project.py
           echo "--- Game tree ---"
           find Game -maxdepth 2 -not -path "*/Resources/*" | head -40
-          sed -i '' 's/system(command.c_str());/\/\/ system(command.c_str());/g' ios_port/engine/js-bindings/cocos2d-x/extensions/assets-manager/AssetsManager.cpp || true
+          sed -i '' 's/system(command.c_str());/\/\/ system(command.c_str());/g' engine/js-bindings/cocos2d-x/extensions/assets-manager/AssetsManager.cpp || true
 
       - name: Build (arm64, unsigned)
         run: |
