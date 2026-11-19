@@ -9,7 +9,7 @@ pl = {
     "CFBundleIcons": {"CFBundlePrimaryIcon": {"CFBundleIconFiles": [
         "Icon-29", "Icon-40", "Icon-57", "Icon-58", "Icon-72", "Icon-76",
         "Icon-80", "Icon-100", "Icon-114", "Icon-120", "Icon-144", "Icon-152"]}},
-    "CFBundleIdentifier": "com.kzsg3.sanguo3",
+    "CFBundleIdentifier": "com.kzsg3.game2026",
     "CFBundleInfoDictionaryVersion": "6.0",
     "CFBundleName": "KZSG3",
     "CFBundlePackageType": "APPL",
