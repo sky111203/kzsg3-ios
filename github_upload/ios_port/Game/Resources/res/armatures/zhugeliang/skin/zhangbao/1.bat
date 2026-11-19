@@ -1,0 +1,35 @@
+ren 身体.png shenti.png            
+ren 下摆.png xiabai.png
+ren 内裙.png dress.png
+ren 内裙后.png dressback.png
+ren 斗篷后.png cloakback.png
+ren 右上臂攻击.png youshangbigongji.png
+ren 右上臂.png youshangbi.png
+ren 右下摆.png youxiabai.png
+ren 右大腿.png youdatui.png
+ren 右小腿.png youxiaotui.png
+ren 右小臂攻击.png youxiabbi_gongji.png
+ren 右小臂.png youxiaobi.png
+ren 右下臂.png youxiaobi.png
+ren 右手攻击.png youyou_gongji.png
+ren 右手.png youshou.png
+ren 右脚.png youjiao.png
+ren 头.png tou.png
+ren 左上臂.png zuoshangbi.png
+ren 左下摆.png zuoxiabai.png
+ren 左大腿.png zuodatui.png
+ren 左大腿2.png zuodatui_2.png
+ren 左大腿行动.png zuodatui_2.png
+
+ren 左小腿.png zuoxiaotui.png
+ren 左小腿行动.png zuoxiaotui_2.png
+ren 左小腿2.png zuoxiaotui_2.png
+ren 左小臂.png zuoxiaobi.png
+ren 左下臂.png zuoxiaobi.png
+ren 左手.png zuoshou.png
+ren 左脚.png zuojiao.png
+ren 左脚2.png zuojiao_2.png
+ren 左脚行动.png zuojiao_2.png
+ren 武器.png wuqi.png
+ren 腰带.png yaodai.png
+

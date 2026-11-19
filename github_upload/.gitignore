@@ -1,0 +1,6 @@
+ios_port/engine/
+ios_port/Game/bld/
+ios_port/Game/Payload/
+ios_port/Game/*.ipa
+ios_port/Game/KZSG3.xcodeproj/project.xcworkspace/
+*.log

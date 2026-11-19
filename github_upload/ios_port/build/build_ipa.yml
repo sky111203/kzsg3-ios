@@ -1,0 +1,87 @@
+name: Build KZSG3 iOS IPA (unsigned)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: macos-13
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Pillow (icons)
+        run: pip3 install pillow
+
+      - name: Download cocos2d-js v3.0-beta engine bundle
+        run: |
+          set -e
+          curl -L --retry 3 -o /tmp/cocos2d-js.zip "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-beta.zip"
+          mkdir -p /tmp/cjs && cd /tmp/cjs
+          unzip -q /tmp/cocos2d-js.zip
+          ls
+          echo "COCOS2D_JS_ROOT=/tmp/cjs/cocos2d-js-v3.0-beta" >> $GITHUB_ENV
+
+      - name: Assemble Xcode project (engine + pbxproj + icons)
+        run: |
+          set -e
+          cd ios_port
+          python3 tools/assemble_project.py
+          echo "--- Game tree ---"
+          find Game -maxdepth 2 -not -path "*/Resources/*" | head -40
+
+      - name: Build (arm64, unsigned)
+        run: |
+          set -e
+          cd ios_port/Game
+          set -o pipefail
+          xcodebuild -project KZSG3.xcodeproj \
+                     -target "KZSG3 iOS" \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     ARCHS=arm64 \
+                     ONLY_ACTIVE_ARCH=NO \
+                     ENABLE_BITCODE=NO \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGN_IDENTITY="" \
+                     SYMROOT="$GITHUB_WORKSPACE/bld" \
+                     build 2>&1 | tee "$GITHUB_WORKSPACE/build.log"
+
+      - name: Show build summary
+        if: always()
+        run: |
+          echo "== errors =="
+          grep -n "error:" "$GITHUB_WORKSPACE/build.log" | head -60 || echo "(none)"
+          echo "== last lines =="
+          tail -30 "$GITHUB_WORKSPACE/build.log" || true
+
+      - name: Package unsigned IPA
+        run: |
+          set -e
+          cd ios_port/Game
+          APP=$(find "$GITHUB_WORKSPACE/bld" -maxdepth 3 -name "*.app" | head -1)
+          echo "APP=$APP"
+          test -n "$APP"
+          rm -rf Payload
+          mkdir Payload
+          cp -R "$APP" Payload/
+          zip -qry KZSG3-ios-arm64-unsigned.ipa Payload
+          ls -lh KZSG3-ios-arm64-unsigned.ipa
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: KZSG3-ios-arm64-unsigned
+          path: ios_port/Game/KZSG3-ios-arm64-unsigned.ipa
+          if-no-files-found: error
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+          if-no-files-found: ignore
