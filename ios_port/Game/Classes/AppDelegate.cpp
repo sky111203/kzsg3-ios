@@ -93,8 +93,10 @@ bool AppDelegate::applicationDidFinishLaunching()
     JSErrorHUD::install(director, cx);
 
     // 启动序列与原包 lib 固化一致
+    JSErrorHUD::log("boot: main.js at: " + FileUtils::getInstance()->fullPathForFilename("main.js"));
     JSErrorHUD::log("boot: run script/jsb_boot.js");
-    sc->runScript("script/jsb_boot.js");
+    bool rb = sc->runScript("script/jsb_boot.js");
+    JSErrorHUD::log(std::string("boot: jsb_boot rc=") + (rb ? "true" : "false"));
     JSErrorHUD::drainJSException(cx, "jsb_boot.js");
     JSErrorHUD::log("boot: jsb_boot done");
 
@@ -102,7 +104,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
 
     JSErrorHUD::log("boot: run main.js");
-    sc->runScript("main.js");
+    bool rm = sc->runScript("main.js");
+    JSErrorHUD::log(std::string("boot: main.js rc=") + (rm ? "true" : "false"));
     JSErrorHUD::drainJSException(cx, "main.js");
     JSErrorHUD::log("boot: main.js done");
 
