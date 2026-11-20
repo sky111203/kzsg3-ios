@@ -45,7 +45,6 @@ AppDelegate::~AppDelegate()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-    NSLog(@"[kzsg3] applicationDidFinishLaunching ENTER");
     JSErrorHUD::log("app: didFinishLaunching ENTER");
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
