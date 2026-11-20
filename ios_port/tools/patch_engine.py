@@ -25,7 +25,8 @@ patch_file(
 )
 
 # 2) FileUtils.setPopupNotify 原生绑定 (final SDK 有, beta 缺失)
-f = "engine/js-bindings/bindings/manual/cocos2d_specifics.cpp"if os.path.isfile(f):
+f = "engine/js-bindings/bindings/manual/cocos2d_specifics.cpp"
+if os.path.isfile(f):
     t = open(f, encoding="utf-8", errors="replace").read()
     if "js_cocos2dx_CCFileUtils_setPopupNotify" not in t:
         func = (
