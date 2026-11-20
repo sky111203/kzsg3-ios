@@ -187,15 +187,19 @@ bool AppDelegate::applicationDidFinishLaunching()
         ,NULL, "stub.js", NULL);
     JSErrorHUD::log("boot: batch stubs installed");
 
-    // UI 命名空间迁移: beta 把 UI 类挂在全局根, 正式版在 ccui 下 → 建立别名
+    // UI 命名空间迁移: beta 把 UI 类挂在全局根或 cc 下, 正式版在 ccui 下 → 三路兜底别名
     sc->evalString(
         "var ccui = typeof ccui !== 'undefined' ? ccui : {};"
         "var __uialias = ['Scale9Sprite','Button','CheckBox','ImageView','Layout','ListView','LoadingBar','PageView','ScrollView','Slider','Text','TextAtlas','TextBMFont','TextField','Widget','RichText','Helper','LayoutParameter','LinearLayoutParameter','RelativeLayoutParameter','RichElement','RichElementImage','RichElementText','RichElementCustomNode'];"
         "for (var i = 0; i < __uialias.length; i++) {"
         " var n = __uialias[i];"
-        " try { if (typeof ccui[n] === 'undefined' && typeof this[n] !== 'undefined') ccui[n] = this[n]; } catch (e) {}"
+        " if (typeof ccui[n] !== 'undefined') continue;"
+        " var src = null;"
+        " try { if (typeof this[n] !== 'undefined') src = this[n]; } catch (e) {}"
+        " if (src === null && typeof cc !== 'undefined' && typeof cc[n] !== 'undefined') src = cc[n];"
+        " if (src === null && typeof ccs !== 'undefined' && typeof ccs[n] !== 'undefined') src = ccs[n];"
+        " if (src !== null) ccui[n] = src;"
         "}"
-        "try { if (typeof ccui.Helper !== 'undefined' && !ccui.Helper.seekWidgetByRelativeName) ccui.Helper.seekWidgetByRelativeName = ccui.Helper.seekWidgetByName || function() { return null; }; } catch (e) {}"
         ,NULL, "uialias.js", NULL);
     JSErrorHUD::log("boot: ccui aliases installed");
     JSErrorHUD::log("boot: ccs shim installed");
