@@ -83,6 +83,25 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->start();
     JSErrorHUD::log("boot: sc->start() ok");
 
+    // ccs (CocoStudio 2.0) 兼容垫片: beta studio 绑定缺 ActionTimelineCache, JS 桩顶替
+    sc->evalString(
+        "var ccs = typeof ccs !== 'undefined' ? ccs : {};"
+        "if (!ccs.ActionTimelineCache) {"
+        " ccs.ActionTimelineCache = function() {"
+        "  this.loadActionTimelineFromBuffer = function() { return null; };"
+        "  this.loadActionTimelineWithFile = function() { return null; };"
+        "  this.loadActionTimeline = function() { return null; };"
+        "  this.createActionTimeline = function() { return null; };"
+        "  this.bindAnimationOnNode = function() {};"
+        " };"
+        " ccs.ActionTimelineCache.getInstance = function() {"
+        "  if (!ccs.__atcI) ccs.__atcI = new ccs.ActionTimelineCache();"
+        "  return ccs.__atcI;"
+        " };"
+        "}"
+    );
+    JSErrorHUD::log("boot: ccs shim installed");
+
     JSContext *cx = sc->getGlobalContext();
     JSErrorHUD::setErrorReporter(cx);   // JS 编译/执行错误全部上屏
     JSErrorHUD::log("boot: searchPaths:");
