@@ -120,6 +120,10 @@ bool AppDelegate::applicationDidFinishLaunching()
         " };"
         " ccs.ActionTimelineNode = function() {};"
         " ccs.ActionTimelineNode.create = function() { return null; };"
+        // 游戏私改 lib 的自定义原生函数
+        " var __msgbox = typeof __msgbox !== 'undefined' ? __msgbox : function(m) {"
+        "  if (typeof cc !== 'undefined' && cc.log) cc.log('[msgbox] ' + m);"
+        " };"
         "}",
         NULL, "ccs_shim.js", NULL);
 
