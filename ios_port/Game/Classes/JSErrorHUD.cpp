@@ -133,7 +133,14 @@ void JSErrorHUD::install(Director *director, JSContext *cx)
     if (g_installed) return;
     g_installed = true;
     log("boot: installing HUD");
-    // 不再创建调试场景抢占游戏场景: cc.game.run() 的场景在主循环异步创建
+    auto scene = director->getRunningScene();
+    if (!scene) {
+        log("boot: no scene yet - debug scene on (game scene will replace it)");
+        auto s = Scene::create();
+        director->runWithScene(s);
+    } else {
+        log("boot: JS created running scene OK");
+    }
     auto updater = HUDUpdater::getInstance();
     director->getScheduler()->scheduleUpdate(updater, 0, false);
     director->getScheduler()->schedule(hud_tick, updater, 0.25f, false, "kzsg3_tick");
