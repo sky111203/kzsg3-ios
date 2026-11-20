@@ -98,8 +98,8 @@ bool AppDelegate::applicationDidFinishLaunching()
         "  if (!ccs.__atcI) ccs.__atcI = new ccs.ActionTimelineCache();"
         "  return ccs.__atcI;"
         " };"
-        "}"
-    );
+        "}",
+        NULL, "ccs_shim.js", NULL);
     JSErrorHUD::log("boot: ccs shim installed");
 
     JSContext *cx = sc->getGlobalContext();
