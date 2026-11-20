@@ -6,6 +6,8 @@
 
 #include <string>
 #include <vector>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 USING_NS_CC;
 
@@ -17,6 +19,16 @@ static void append_file(const std::string &s)
 {
     if (g_file.empty())
         g_file = FileUtils::getInstance()->getWritablePath() + "kzsg3_log.txt";
+    // Documents 目录可能不存在: 先递归创建, 否则 fopen 静默失败
+    static bool dir_ensured = false;
+    if (!dir_ensured) {
+        size_t pos = g_file.rfind('/');
+        if (pos != std::string::npos) {
+            std::string dir = g_file.substr(0, pos);
+            mkdir(dir.c_str(), 0755);
+        }
+        dir_ensured = true;
+    }
     FILE *f = fopen(g_file.c_str(), "a");
     if (f) {
         fputs((s + "\n").c_str(), f);
