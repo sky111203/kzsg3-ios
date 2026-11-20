@@ -57,7 +57,13 @@ void JSErrorHUD::drainJSException(JSContext *cx, const std::string &where)
     JS::RootedValue exn(cx);
     if (JS_GetPendingException(cx, &exn)) {
         JS_ClearPendingException(cx);
-        log("JS EXCEPTION @ " + where + ": " + jsval_to_std(cx, exn));
+        JSObject *g = ScriptingCore::getInstance()->getGlobalObject();
+        if (g) {
+            JSAutoCompartment ac(cx, g);
+            log("JS EXCEPTION @ " + where + ": " + jsval_to_std(cx, exn));
+        } else {
+            log("JS EXCEPTION @ " + where + ": (no global)");
+        }
     } else {
         log("JS EXCEPTION @ " + where + ": (unfetchable)");
     }
@@ -130,6 +136,9 @@ void JSErrorHUD::install(Director *director, JSContext *cx)
     if (cx) {
         JSObject *global = ScriptingCore::getInstance()->getGlobalObject();
         if (global) {
+            // 关键修复: 先进入全局 compartment, 否则 cx->global() 为空,
+            // JS_DefineFunction -> GetClassPrototype 会在 NULL+0x40 崩溃
+            JSAutoCompartment ac(cx, global);
             JS_DefineFunction(cx, global, "log", js_kzsg3_log, 0,
                               JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE);
             log("boot: JS log() redirected to file/HUD");
