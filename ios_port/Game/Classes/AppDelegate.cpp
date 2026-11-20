@@ -190,6 +190,29 @@ bool AppDelegate::applicationDidFinishLaunching()
     // UI 命名空间迁移: beta 把 UI 类挂在全局根或 cc 下, 正式版在 ccui 下 → 三路兜底别名
     sc->evalString(
         "var ccui = typeof ccui !== 'undefined' ? ccui : {};"
+        // EditBox: beta 引擎无原生 EditBox, 用 JS 桩 (文本输入功能受限但启动可用)
+        "if (typeof ccui.EditBox === 'undefined') {"
+        " ccui.EditBox = function() { this._stub = true; };"
+        " ccui.EditBox.prototype.initWithSizeAndBackgroundImage = function() { return true; };"
+        " ccui.EditBox.prototype.setText = function() {};"
+        " ccui.EditBox.prototype.getText = function() { return ''; };"
+        " ccui.EditBox.prototype.setPlaceHolder = function() {};"
+        " ccui.EditBox.prototype.setPlaceholderFont = function() {};"
+        " ccui.EditBox.prototype.setPlaceholderFontSize = function() {};"
+        " ccui.EditBox.prototype.setPlaceholderFontColor = function() {};"
+        " ccui.EditBox.prototype.setFontSize = function() {};"
+        " ccui.EditBox.prototype.setFontColor = function() {};"
+        " ccui.EditBox.prototype.setMaxLength = function() {};"
+        " ccui.EditBox.prototype.setInputMode = function() {};"
+        " ccui.EditBox.prototype.setInputFlag = function() {};"
+        " ccui.EditBox.prototype.setReturnType = function() {};"
+        " ccui.EditBox.prototype.setDelegate = function() {};"
+        " ccui.EditBox.prototype.registerScriptEditBoxHandler = function() {};"
+        " ccui.EditBox.prototype.unregisterScriptEditBoxHandler = function() {};"
+        " ccui.EditBox.prototype.setPosition = function() {};"
+        " ccui.EditBox.prototype.setVisible = function() {};"
+        " ccui.EditBox.prototype.create = function() { return null; };"
+        "}"
         "var __uialias = ['Scale9Sprite','Button','CheckBox','ImageView','Layout','ListView','LoadingBar','PageView','ScrollView','Slider','Text','TextAtlas','TextBMFont','TextField','Widget','RichText','Helper','LayoutParameter','LinearLayoutParameter','RelativeLayoutParameter','RichElement','RichElementImage','RichElementText','RichElementCustomNode'];"
         "for (var i = 0; i < __uialias.length; i++) {"
         " var n = __uialias[i];"
@@ -200,6 +223,8 @@ bool AppDelegate::applicationDidFinishLaunching()
         " if (src === null && typeof ccs !== 'undefined' && typeof ccs[n] !== 'undefined') src = ccs[n];"
         " if (src !== null) ccui[n] = src;"
         "}"
+        // ControlButton 别名 (beta 里叫 Control)
+        "try { if (typeof cc !== 'undefined' && typeof cc.ControlButton === 'undefined' && typeof cc.Control !== 'undefined') cc.ControlButton = cc.Control; } catch (e) {}"
         ,NULL, "uialias.js", NULL);
     JSErrorHUD::log("boot: ccui aliases installed");
     JSErrorHUD::log("boot: ccs shim installed");
