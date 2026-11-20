@@ -44,6 +44,22 @@ static AppDelegate s_sharedApplication;
 
     // Override point for customization after application launch.
 
+#ifdef KZ_MINIMAL
+    // ===== 极简模式: 跳过全部 cocos/JS 初始化, 只显示红屏 (分流测试) =====
+    window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
+    UIView *red = [[UIView alloc] initWithFrame:window.bounds];
+    red.backgroundColor = [UIColor redColor];
+    UILabel *lb = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, window.bounds.size.width, 100)];
+    lb.text = @"MINIMAL MODE OK";
+    lb.textColor = [UIColor whiteColor];
+    lb.textAlignment = NSTextAlignmentCenter;
+    lb.font = [UIFont boldSystemFontOfSize:28];
+    [red addSubview:lb];
+    [window addSubview:red];
+    [window makeKeyAndVisible];
+    return YES;
+#endif
+
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
     CCEAGLView *eaglView = [CCEAGLView viewWithFrame: [window bounds]
@@ -72,8 +88,23 @@ static AppDelegate s_sharedApplication;
         // use this method on ios6
         [window setRootViewController:viewController];
     }
-    
+
     [window makeKeyAndVisible];
+
+#ifdef KZ_MINIMAL
+    // ===== 极简模式: 跳过全部 cocos/JS 初始化, 只显示红屏 (分流测试) =====
+    UIView *red = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    red.backgroundColor = [UIColor redColor];
+    UILabel *lb = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, [UIScreen mainScreen].bounds.size.width, 100)];
+    lb.text = @"MINIMAL MODE OK";
+    lb.textColor = [UIColor whiteColor];
+    lb.textAlignment = NSTextAlignmentCenter;
+    lb.font = [UIFont boldSystemFontOfSize:28];
+    [red addSubview:lb];
+    [window addSubview:red];
+    [window makeKeyAndVisible];
+    return YES;
+#endif
 
     [[UIApplication sharedApplication] setStatusBarHidden: YES];
 

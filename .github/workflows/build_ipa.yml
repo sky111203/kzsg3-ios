@@ -49,6 +49,7 @@ jobs:
                      -configuration Release \
                      -sdk iphoneos \
                      ARCHS=arm64 \
+                     OTHER_CFLAGS='$(inherited) -DKZ_MINIMAL' \
                      ONLY_ACTIVE_ARCH=NO \
                      ENABLE_BITCODE=NO \
                      CODE_SIGNING_ALLOWED=NO \
