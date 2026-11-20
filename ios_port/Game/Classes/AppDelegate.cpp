@@ -84,6 +84,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     JSErrorHUD::log("boot: sc->start() ok");
 
     JSContext *cx = sc->getGlobalContext();
+    JSErrorHUD::setErrorReporter(cx);   // JS 编译/执行错误全部上屏
     JSErrorHUD::log("boot: searchPaths:");
     for (auto &p : FileUtils::getInstance()->getSearchPaths())
         JSErrorHUD::log("  path: " + p);
@@ -105,8 +106,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     JSErrorHUD::log("boot: run main.js");
     bool rm = sc->runScript("main.js");
-    JSErrorHUD::log(std::string("boot: main.js rc=") + (rm ? "true" : "false"));
     JSErrorHUD::drainJSException(cx, "main.js");
+    JSErrorHUD::log(std::string("boot: main.js rc=") + (rm ? "true" : "false"));
     JSErrorHUD::log("boot: main.js done");
 
     // 若 JS 已建好场景, HUD 自动叠加到其上

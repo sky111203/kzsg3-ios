@@ -95,6 +95,22 @@ static bool js_kzsg3_log(JSContext *cx, unsigned argc, JS::Value *vp)
     return true;
 }
 
+// JS 错误报告器: 编译/执行错误直接上屏
+void JSErrorHUD::setErrorReporter(JSContext *cx)
+{
+    if (!cx) return;
+    struct Rep {
+        static void report(JSContext *cx2, const char *message, JSErrorReport *report) {
+            std::string m = message ? message : "(no message)";
+            if (report && report->filename)
+                m += std::string(" [") + report->filename + ":" +
+                     std::to_string((unsigned long)report->lineno) + "]";
+            JSErrorHUD::log("JS ERROR: " + m);
+        }
+    };
+    JS_SetErrorReporter(cx, &Rep::report);
+}
+
 class HUDUpdater : public Ref
 {
 public:

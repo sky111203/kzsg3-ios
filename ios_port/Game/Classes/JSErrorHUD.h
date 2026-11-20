@@ -15,6 +15,8 @@ public:
     static void drainJSException(JSContext *cx, const std::string &where);
     // 若无运行场景则建调试场景, 否则叠加 HUD; 并挂帧刷新 + 注册 JS log 重定向
     static void install(cocos2d::Director *director, JSContext *cx);
+    // 把 JS 错误报告器接到 HUD(编译/执行错误全部上屏)
+    static void setErrorReporter(JSContext *cx);
 };
 
 #endif
