@@ -80,6 +80,12 @@ jobs:
           if [ "$APP" != "$NEWAPP" ]; then mv "$APP" "$NEWAPP"; fi
           APP="$NEWAPP"
           echo "RENAMED APP=$APP"
+          # 平铺 Resources 子目录到 .app 根 (LSD 拒绝含顶层 Resources 目录的 bundle; 同时修正运行时资源路径)
+          if [ -d "$APP/Resources" ]; then
+            cp -R "$APP/Resources/"* "$APP/" 2>/dev/null || true
+            rm -rf "$APP/Resources"
+          fi
+          ls "$APP" | head -30
           rm -rf Payload
           mkdir Payload
           cp -R "$APP" Payload/
