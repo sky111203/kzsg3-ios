@@ -186,6 +186,18 @@ bool AppDelegate::applicationDidFinishLaunching()
         "__kstub('ccs.ZOrderFrame');"
         ,NULL, "stub.js", NULL);
     JSErrorHUD::log("boot: batch stubs installed");
+
+    // UI 命名空间迁移: beta 把 UI 类挂在全局根, 正式版在 ccui 下 → 建立别名
+    sc->evalString(
+        "var ccui = typeof ccui !== 'undefined' ? ccui : {};"
+        "var __uialias = ['Scale9Sprite','Button','CheckBox','ImageView','Layout','ListView','LoadingBar','PageView','ScrollView','Slider','Text','TextAtlas','TextBMFont','TextField','Widget','RichText','Helper','LayoutParameter','LinearLayoutParameter','RelativeLayoutParameter','RichElement','RichElementImage','RichElementText','RichElementCustomNode'];"
+        "for (var i = 0; i < __uialias.length; i++) {"
+        " var n = __uialias[i];"
+        " try { if (typeof ccui[n] === 'undefined' && typeof this[n] !== 'undefined') ccui[n] = this[n]; } catch (e) {}"
+        "}"
+        "try { if (typeof ccui.Helper !== 'undefined' && !ccui.Helper.seekWidgetByRelativeName) ccui.Helper.seekWidgetByRelativeName = ccui.Helper.seekWidgetByName || function() { return null; }; } catch (e) {}"
+        ,NULL, "uialias.js", NULL);
+    JSErrorHUD::log("boot: ccui aliases installed");
     JSErrorHUD::log("boot: ccs shim installed");
 
     JSContext *cx = sc->getGlobalContext();
